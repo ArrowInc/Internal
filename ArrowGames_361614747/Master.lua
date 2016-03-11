@@ -83,7 +83,7 @@ local MessageBlacklist = {
 	'.+:Destroy([.*]?)'
 }
 local Modes = {
-	'Default',
+	'Normal',
 	-- more coming soon!
 }
 local round = {
