@@ -489,7 +489,9 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 				pcall(function() pcall(Code.Item,false,client) end)
 			end)()
 		end
-		
+		coroutine.wrap(function()
+			pcall(function() log("[ Player successfully redeemed code " .. tostring(Code.Code) .. " ]",client) end)
+		end)()
 		return 'Success!',Color3.new(0,1,0)
 	elseif mode == 'GetAFKStatus' then
 		local isAFK = false
