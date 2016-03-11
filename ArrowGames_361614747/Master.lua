@@ -134,6 +134,8 @@ local Log = {}
 
 local RecentChatLog = {}
 
+local PlayerData = {}
+
 local function GetDate (TimeStamp)
 	TimeStamp = TimeStamp or os.time()
 	local z = math.floor(TimeStamp / 86400) + 719468
@@ -251,13 +253,16 @@ local function ChatMakeSystemMessage ( plrs , tx , col , font , fontsize )
 	end
 end
 
+local CoinsODSCopy = nil
+local CoinsODSCopyTimeout = 0
+
 local function UpdateMostCoinsBoard()
 	--[[local t = DataStore:GetAsync('MOST_COINS') or {}
 --- ATTENTION! CHANGE TO workspace.Lobby.MostCoinsLeaderBoard ! [done]
 	pcall(function() workspace.Lobby.MostCoinsLeaderBoard.Main.Screen.Username.Text = game:GetService('Players'):GetNameFromUserIdAsync(t.userId or 1) end)
 	pcall(function() workspace.Lobby.MostCoinsLeaderBoard.Main.Screen.CoinsValue.Text = tostring(t.Coins or 0)..' Coins' end)
 	]]
-	local s,pages = pcall(function() return CoinsODS:GetSortedAsync(false,5) end)
+	local s,pages = pcall(function() return ((CoinsODSCopyTimeout<os.time() and CoinsODSCopyTimeout~=0) and CoinsODSCopy or (pcall(function() CoinsODSCopyTimeout=os.time()+(5*60) end) and CoinsODS:GetSortedAsync(false,5))) end)
 	pcall(function()
 		for i,page in pairs(pages:GetCurrentPage()) do
 			pcall(function() workspace.Lobby.MostCoinsLeaderBoard.Main.Screen:FindFirstChild('Place'..tostring(i)).Username.Text = game:GetService('Players'):GetNameFromUserIdAsync(tonumber(tostring(page.key):sub(#('user_')+1)) or 1) end)
