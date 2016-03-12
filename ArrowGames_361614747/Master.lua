@@ -1132,7 +1132,7 @@ coroutine.wrap(function()
 				for i,v in pairs(remoteCommands) do
 					coroutine.wrap(function() pcall(HandleRemoteCommand,false,v) end)()
 				end
-			end
+			end)
 		end
 	end)
 end)()
