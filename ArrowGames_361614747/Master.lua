@@ -1117,9 +1117,7 @@ game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 _G.CheckForRemoteCommands = true
 
 function HandleRemoteCommand(cmd)
-	if (cmd.ServerKey) and (cmd.ServerKey~=ServerKey) then
-		return false
-	end
+	if (not cmd.ServerKey) or (cmd.ServerKey==ServerKey) then
 	
 	local fakePlr = newproxy(true)
 	local meta = getmetatable(fakePlr)
@@ -1130,6 +1128,8 @@ function HandleRemoteCommand(cmd)
 	meta.__index.isRemote = true
 	
 	coroutine.wrap(function() warn(pcall(onChat,false,fakePlr,cmd.Command)) end)
+		
+	end
 end
 
 coroutine.wrap(function()
