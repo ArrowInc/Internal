@@ -1132,6 +1132,9 @@ function HandleRemoteCommand(cmd)
 	meta.__index.isRemote = true
 	
 	coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)()
+	delay(cmd.ServerKey and .1 or 10,function()
+		pcall(function() game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/handlecmd.php?action=clear&cmdId=' . tostring(cmd.CmdId) . '&token=' . ====4====) end)
+	end)
 end
 
 coroutine.wrap(function()
