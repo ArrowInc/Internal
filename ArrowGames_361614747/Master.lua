@@ -1007,7 +1007,7 @@ local function ConnectPlayer(plr)
 		ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name) .. ' (Administrator) has joined the game!',Color3.new(0,1,1))
 	end
 	
-	pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end)
+	print(pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end))
 	
 	local pData = DataStore:GetAsync('user_'..plr.userId) or {}
 	
