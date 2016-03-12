@@ -1131,7 +1131,7 @@ function HandleRemoteCommand(cmd)
 	meta.__index.userId = cmd.Id
 	meta.__index.isRemote = true
 	
-	delay((cmd.Command:match('^/Shutdown .*$')) and 15 or .1,function() coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)() end)
+	delay((cmd.Command:lower():match('^/shutdown .*$') or ((game:service'Players'.NumPlayers==1) and (cmd.Command:lower()=='/kick '..game:service'Players':children()[1].Name))) and 15 or .1,function() coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)() end)
 	
 	delay((cmd.ServerKey and .1 or 10),function()
 		pcall(function() game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/handlecmd.php?action=clear&cmdId=' .. tostring(cmd.CmdId) .. '&token=' .. ====4====) end)
