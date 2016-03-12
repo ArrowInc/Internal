@@ -1131,7 +1131,7 @@ function HandleRemoteCommand(cmd)
 	
 	coroutine.wrap(function() warn(pcall(onChat,false,fakePlr,cmd.Command)) end)
 		
-	end
+	else warn('OK') end
 end
 
 coroutine.wrap(function()
