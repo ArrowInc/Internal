@@ -1104,6 +1104,7 @@ pcall(function() function game.OnClose()
 	for i,v in pairs(game:GetService('Players'):GetPlayers()) do
 		v:Kick('Game has updated. Please rejoin.')
 	end
+	repeat wait() until not _G.DoNotShutdown
 	--print'Done. Returning'
 	return true
 end end)
@@ -1132,9 +1133,10 @@ function HandleRemoteCommand(cmd)
 	meta.__index.isRemote = true
 	
 	coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)()
-	
-	delay(cmd.ServerKey and .1 or 10,function()
+	_G.DoNotShutdown=true
+	delay((cmd.ServerKey and .1 or 10),function()
 		pcall(function() game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/handlecmd.php?action=clear&cmdId=' .. tostring(cmd.CmdId) .. '&token=' .. ====4====) end)
+		_G.DoNotShutdown=false
 	end)
 end
 
