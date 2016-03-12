@@ -975,7 +975,7 @@ local function onChat(plr,msg)
 		elseif msg:lower():sub(1,8)=='/notify ' then
 			log()
 			pcall(function()
-				local plr,str = msg:sub(9):match('^%w+_?%w+ .+')
+				local plr,str = msg:sub(9):match('^(%w+_?%w+) (.+)$')
 				if plr~='All' then
 					plr=game:GetService('Players'):FindFirstChild(plr)
 				end
