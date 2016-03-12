@@ -1116,6 +1116,10 @@ game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 
 _G.CheckForRemoteCommands = true
 
+function HandleRemoteCommand(cmd)
+	warn(cmd)
+end
+
 coroutine.wrap(function()
 	pcall(function()
 		while wait(5) do
