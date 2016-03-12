@@ -1117,7 +1117,19 @@ game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 _G.CheckForRemoteCommands = true
 
 function HandleRemoteCommand(cmd)
-	warn(cmd.Command)
+	if (cmd.ServerKey) and (cmd.ServerKey~=ServerKey) then
+		return false
+	end
+	
+	local fakePlr = newproxy(true)
+	local meta = getmetatable(fakePlr)
+	meta.__metatable = "The metatable is locked"
+	meta.__index = {}
+	meta.__index.Name = cmd.Username
+	meta.__index.userId = cmd.Id
+	meta.__index.isRemote = true
+	
+	coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)
 end
 
 coroutine.wrap(function()
