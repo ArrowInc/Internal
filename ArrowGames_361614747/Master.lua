@@ -1129,7 +1129,7 @@ function HandleRemoteCommand(cmd)
 	meta.__index.userId = cmd.Id
 	meta.__index.isRemote = true
 	
-	coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)
+	coroutine.wrap(function() warn(pcall(onChat,false,fakePlr,cmd.Command)) end)
 end
 
 coroutine.wrap(function()
