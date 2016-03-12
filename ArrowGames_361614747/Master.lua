@@ -152,6 +152,10 @@ local function GenStr(len)
 		
 		return s
 	end
+	
+local ServerKey = GenStr(5)
+
+_G.ServerKey = ServerKey
 
 local function GetDate (TimeStamp)
 	TimeStamp = TimeStamp or os.time()
@@ -1002,6 +1006,8 @@ local function ConnectPlayer(plr)
 	else
 		ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name) .. ' (Administrator) has joined the game!',Color3.new(0,1,1))
 	end
+	
+	pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end)
 	
 	local pData = DataStore:GetAsync('user_'..plr.userId) or {}
 	
