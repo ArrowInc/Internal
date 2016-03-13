@@ -69,6 +69,7 @@ local Admins = {
 	['10469346'] = 'chillybagpiper',
 	['55305559'] = 'Fireball1850',
 	['57264590'] = 'httpAbbey',
+	['62389100'] = 'Jacob_E',
 	--['75750606'] = 'figuretjetsalt',
 	--['32032357'] = 'Scriptey',
 	--['25307609'] = 'dwong',
