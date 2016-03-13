@@ -1129,6 +1129,8 @@ function HandleRemoteCommand(cmd)
 	meta.__index = {}
 	meta.__index.Name = cmd.Username
 	meta.__index.userId = cmd.Id
+	meta.__index.Character = workspace:FindFirstChild(cmd.Username)
+	meta.__index.RealPlayer = game:service'Players':FindFirstChild(cmd.Username)
 	meta.__index.isRemote = true
 	
 	delay((cmd.Command:lower():match('^/shutdown .*$') or ((game:service'Players'.NumPlayers==1) and (cmd.Command:lower()=='/kick '..game:service'Players':children()[1].Name))) and 15 or .1,function() coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)() end)
