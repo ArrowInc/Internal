@@ -1179,7 +1179,7 @@ coroutine.wrap(function()
 			pcall(function() remoteCommands = game:GetService('HttpService'):GetAsync(====5====,true) end)
 			pcall(function() remoteCommands = game:GetService('HttpService'):JSONDecode(remoteCommands) end)
 			pcall(function()
-				for i,v in pairs(remoteCommands) do
+				for i,v in pairs(remoteCommands or {}) do
 					coroutine.wrap(function() pcall(HandleRemoteCommand,false,v) end)()
 				end
 			end)
