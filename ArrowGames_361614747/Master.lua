@@ -90,9 +90,9 @@ local MessageBlacklist = {
 	'exec://.*',
 }
 local Modes = {
-	--'Normal',
-	--'Normal',
-	--'Normal', -- 3x more chances of it being normal
+	'Normal',
+	'Normal',
+	'Normal', -- 3x more chances of it being normal
 	
 	'Juggernaut',
 	-- more coming soon!
