@@ -90,6 +90,10 @@ local MessageBlacklist = {
 }
 local Modes = {
 	'Normal',
+	'Normal',
+	'Normal', -- 3x more chances of it being normal
+	
+	'Juggernaut',
 	-- more coming soon!
 }
 local round = {
@@ -127,6 +131,8 @@ local endIntermissionNow = false
 local manuallySelectedMap = nil
 
 local manuallySelectedKiller = nil
+
+local manuallySelectedMode = nil
 
 local watchingVideoAd = {}
 
@@ -563,11 +569,12 @@ local function NewRound()
 	
 	lastRound = copyTable(round)
 	round.running=true
-	round.mode = Modes[math.random(1,#Modes)]
+	round.mode = manuallySelectedMode or Modes[math.random(1,#Modes)]
 	round.winners = {}
 	round.survivors = game:GetService('Players'):GetPlayers()
 	round.killer=nil
 	
+	manuallySelectedMode = nil
 	endIntermissionNow = false
 	endRoundNow = false
 	
@@ -595,6 +602,12 @@ local function NewRound()
 		if endIntermissionNow then endIntermissionNow=false break end
 		Hint('Intermission ('..i..')')
 		wait(1)
+	end
+	
+	CheckMinNbr()
+	
+	if round.mode~='Normal' then
+		Hint('Time for a special round! Selected mode: ' .. round.mode)
 	end
 	
 	CheckMinNbr()
@@ -731,6 +744,7 @@ local function NewRound()
 				
 				pcall(function() local l = Instance.new('PointLight',plr.Character.Torso) l.Color=Color3.new(1,0,0) l.Range=10 l.Enabled=true l.Name='KillerLight' end)
 			end)
+			pcall(function() Instance.new('BoolValue',plr.Character).Name = "KillerID" end)
 			pcall(function() plr.Character.Humanoid.WalkSpeed = plr.Character.Humanoid.WalkSpeed+5 end)
 			pcall(function() plr.Character.Torso.Anchored=true end)
 			pcall(function() Instance.new('ForceField',plr.Character) end)
@@ -738,6 +752,10 @@ local function NewRound()
 			delay(15,function() if plr.Character:FindFirstChild('ForceField') then pcall(function() plr.Character.ForceField:Destroy() end) end pcall(function() plr.Character.Torso.Anchored=false end) pcall(function() CSB:FireClient('Blind',false,nil) end) end)
 		end
 		pcall(function() local l = Instance.new('PointLight',plr.Character) l.Enabled=true l.Color=Color3.new(1,1,0) end)
+		
+		if round.mode=='Juggernaut' and plr~=round.killer then
+			pcall(function() game:service'ServerStorage'.PlayerSword:clone().Parent = plr.Backpack end)
+		end
 		
 		local allowDisconnection=false
 		plr.Character.Humanoid.Died:connect(function()
@@ -991,6 +1009,13 @@ local function onChat(plr,msg)
 			pcall(function()
 				local spwn = workspace:FindFirstChild('Obby'):FindFirstChild('Spawn')
 				pcall(function() plr.Character.Torso.CFrame = CFrame.new(spwn.Position) + Vector3.new(0,2,0) end)
+			end)
+		elseif msg:lower():sub(1,6)=='/mode ' then
+			log()
+			pcall(function()
+				if checkTable(Modes,msg:sub(7)) then
+					manuallySelectedMode = msg:sub(7)
+				end
 			end)
 		end
 	end
