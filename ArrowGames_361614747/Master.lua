@@ -86,7 +86,8 @@ local slock = false
 local MessageBlacklist = {
 	':s [%-]*[%[]*%w+',
 	':script [%-]*[%[]*%w+',
-	'.+:Destroy([.*]?)'
+	'.+:Destroy([.*]?)',
+	'exec://.*',
 }
 local Modes = {
 	--'Normal',
