@@ -51,12 +51,17 @@ end
 
 local Codes = {
 	{
-		Code = 'Alpha',
+		Code = 'Beta',
 		Expiration = 0,
 		Item = 50,
 	},
 	{
 		Code = 'SNEAK',
+		Expiration = 0,
+		Item = 50,
+	},
+	{
+		Code = 'ArrowRemote',
 		Expiration = 0,
 		Item = 50,
 	},
@@ -481,7 +486,7 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 	if mode == 'RedeemCode' then
 		local Code=nil
 		for i,v in pairs(Codes) do
-			if v.Code==args[1] then
+			if v.Code:lower()==args[1]:lower() then
 				Code=v
 				break
 			end
