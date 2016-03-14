@@ -608,6 +608,7 @@ local function NewRound()
 	
 	if round.mode~='Normal' then
 		Hint('Time for a special round! Selected mode: ' .. round.mode)
+		wait(3)
 	end
 	
 	CheckMinNbr()
