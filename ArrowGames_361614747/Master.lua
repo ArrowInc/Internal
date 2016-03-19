@@ -79,9 +79,9 @@ local Admins = {
 	--['25307609'] = 'dwong',
 }
 local debug = true
-local DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
-local CoinsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====2====)
-local LevelsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====3====)
+local ACTUAL_DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
+local ACTUAL_CoinsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====2====)
+local ACTUAL_LevelsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====3====)
 local slock = false
 local MessageBlacklist = {
 	':s [%-]*[%[]*%w+',
@@ -262,6 +262,90 @@ local function isAdmin(plr)
 	end
 end
 
+--
+local DataStore = newproxy(true)
+local DataStoreMeta = getmetatable(DataStore)
+DataStoreMeta.__metatable = "The metatable is locked"
+DataStoreMeta.__tostring = "GlobalDataStore"
+DataStoreMeta.__index = {}
+DataStoreMeta.PendingData = {}
+function DataStoreMeta.__index:SetAsync(key,value)
+	return pcall(function() DataStoreMeta.PendingData[key] = value end)
+end
+function DataStoreMeta.__index:GetAsync(key)
+	return DataStoreMeta.PendingData[key] or ACTUAL_DataStore:GetAsync(key)
+end
+function DataStoreMeta.__index:UpdateAsync(key,func)
+	local oData = self:GetAsync(key)
+	local suc,nData = pcall(func,false,oData)
+	if suc then
+		return pcall(function self:SetAsync(key,nData)
+	end
+end
+function DataStoreMeta.__index:UploadData(key)
+	local pData = self:GetAsync(key)
+	return pcall(function() ACTUAL_DataStore:SetAsync(pData) end)
+end
+function DataStoreMeta.__index:DownloadData(key) -- Use wisely!
+	local nData = ACTUAL_DataStore:GetAsync(key)
+	return pcall(function() DataStoreMeta.PendingData[key] = nData end)
+end
+--
+local CoinsODS = newproxy(true)
+local CoinsODSMeta = getmetatable(CoinsODS)
+CoinsODSMeta.__metatable = "The metatable is locked"
+CoinsODSMeta.__tostring = "OrderedDataStore"
+CoinsODSMeta.__index = {}
+CoinsODSMeta.PendingData = {}
+function CoinsODSMeta.__index:SetAsync(key,value)
+	return pcall(function() CoinsODSMeta.PendingData[key] = value end)
+end
+function CoinsODSMeta.__index:GetAsync(key)
+	return CoinsODSMeta.PendingData[key] or ACTUAL_CoinsODS:GetAsync(key)
+end
+function CoinsODSMeta.__index:UpdateAsync(key,func)
+	local oData = self:GetAsync(key)
+	local suc,nData = pcall(func,false,oData)
+	if suc then
+		return pcall(function self:SetAsync(key,nData)
+	end
+end
+function CoinsODSMeta.__index:UploadData(key)
+	local pData = self:GetAsync(key)
+	return pcall(function() ACTUAL_CoinsODS:SetAsync(pData) end)
+end
+function CoinsODSMeta.__index:DownloadData(key) -- Use wisely!
+	local nData = ACTUAL_CoinsODS:GetAsync(key)
+	return pcall(function() CoinsODSMeta.PendingData[key] = nData end)
+end
+--
+local LevelsODS = newproxy(true)
+local LevelsODSMeta = getmetatable(LevelsODS)
+LevelsODSMeta.__metatable = "The metatable is locked"
+LevelsODSMeta.__tostring = "OrderedDataStore"
+LevelsODSMeta.__index = {}
+LevelsODSMeta.PendingData = {}
+function LevelsODSMeta.__index:SetAsync(key,value)
+	return pcall(function() LevelsODSMeta.PendingData[key] = value end)
+end
+function LevelsODSMeta.__index:GetAsync(key)
+	return LevelsODSMeta.PendingData[key] or ACTUAL_LevelsODS:GetAsync(key)
+end
+function LevelsODSMeta.__index:UpdateAsync(key,func)
+	local oData = self:GetAsync(key)
+	local suc,nData = pcall(func,false,oData)
+	if suc then
+		return pcall(function self:SetAsync(key,nData)
+	end
+end
+function LevelsODSMeta.__index:UploadData(key)
+	local pData = self:GetAsync(key)
+	return pcall(function() ACTUAL_LevelsODS:SetAsync(pData) end)
+end
+function LevelsODSMeta.__index:DownloadData(key) -- Use wisely!
+	local nData = ACTUAL_LevelsODS:GetAsync(key)
+	return pcall(function() LevelsODSMeta.PendingData[key] = nData end)
+end
 --
 
 local function Hint ( tx , plr )
