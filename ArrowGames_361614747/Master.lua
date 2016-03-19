@@ -279,7 +279,7 @@ function DataStoreMeta.__index:UpdateAsync(key,func)
 	local oData = self:GetAsync(key)
 	local suc,nData = pcall(func,false,oData)
 	if suc then
-		return pcall(function self:SetAsync(key,nData)
+		return pcall(function() self:SetAsync(key,nData) end)
 	end
 end
 function DataStoreMeta.__index:UploadData(key)
@@ -307,7 +307,7 @@ function CoinsODSMeta.__index:UpdateAsync(key,func)
 	local oData = self:GetAsync(key)
 	local suc,nData = pcall(func,false,oData)
 	if suc then
-		return pcall(function self:SetAsync(key,nData)
+		return pcall(function() self:SetAsync(key,nData) end)
 	end
 end
 function CoinsODSMeta.__index:UploadData(key)
@@ -335,7 +335,7 @@ function LevelsODSMeta.__index:UpdateAsync(key,func)
 	local oData = self:GetAsync(key)
 	local suc,nData = pcall(func,false,oData)
 	if suc then
-		return pcall(function self:SetAsync(key,nData)
+		return pcall(function() self:SetAsync(key,nData) end)
 	end
 end
 function LevelsODSMeta.__index:UploadData(key)
