@@ -1124,6 +1124,7 @@ local function onChat(plr,msg)
 			pcall(function()
 				if checkTable(Modes,msg:sub(7)) then
 					manuallySelectedMode = msg:sub(7)
+					CSB:FireClient(plr,'Manually selected mode "' .. tostring(manuallySelectedMode) .. '"')
 				end
 			end)
 		end
