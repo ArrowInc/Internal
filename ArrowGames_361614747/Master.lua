@@ -95,7 +95,12 @@ local Modes = {
 	'Normal', -- 3x more chances of it being normal
 	
 	'Juggernaut',
+	'Inside Job',
 	-- more coming soon!
+}
+local SpecialModeDescription = {
+	["Juggernaut"] = "All Players have swords. Kill the Killer to win!",
+	["Inside Job"] = "The Killer is hidden. Trust no one!",
 }
 local round = {
 	running=false,
@@ -700,6 +705,11 @@ local function NewRound()
 	if round.mode~='Normal' then
 		Hint('Time for a special round! Selected mode: ' .. round.mode)
 		wait(3)
+		if SpecialModeDescription[round.mode] then
+			Hint(SpecialModeDescription[round.mode])
+			wait(3)
+		end
+			
 	end
 	
 	CheckMinNbr()
@@ -771,7 +781,7 @@ local function NewRound()
 		pcall(function() CSB:FireClient(plr,'MobileAdPlayer',false) end)
 		pcall(function() CSB:FireClient(plr,'AFKGui',false) end)
 		pcall(function() plr.CameraMode=Enum.CameraMode.LockFirstPerson end)
-		if plr==round.killer then
+		if plr==round.killer and round.mode~='Inside Job' then
 		plr.TeamColor = BrickColor.new('Really red')
 		local cChar = plr.Character
 		delay(16,function() if plr.Character==cChar then Notification(plr,'You are the Killer. Kill all the Players with your sword!',Color3.new(1,0,0),4) end end)
@@ -791,7 +801,7 @@ local function NewRound()
 			pcall(function() local fl=game:GetService('ServerStorage').Flashlight:clone() fl.Parent=plr.Backpack fl.CanBeDropped=false end)
 		end
 		
-		if plr==round.killer then
+		if plr==round.killer and round.Mode~='Inside Job' then
 			pcall(function()
 				repeat wait() until (not plr) or (not plr.Character) or plr.Character:FindFirstChild('Body Colors')
 				for i,v in pairs(plr.Character:children()) do
@@ -835,6 +845,8 @@ local function NewRound()
 				pcall(function() local f = game:service'ServerStorage'.Sword.Handle.Fire:clone() f.Parent=plr.Character.Head CSB:FireClient(plr,'RemoveLocally',f) end)
 				
 				pcall(function() local l = Instance.new('PointLight',plr.Character.Torso) l.Color=Color3.new(1,0,0) l.Range=10 l.Enabled=true l.Name='KillerLight' end)
+				
+				pcall(function() plr.Character.Humanoid.MaxHealth = 600 plr.Character.Humanid.Health = 600 end)
 			end)
 			pcall(function() Instance.new('BoolValue',plr.Character).Name = "KillerID" end)
 			pcall(function() plr.Character.Humanoid.WalkSpeed = plr.Character.Humanoid.WalkSpeed+5 end)
@@ -844,7 +856,7 @@ local function NewRound()
 			delay(15,function() if plr.Character:FindFirstChild('ForceField') then pcall(function() plr.Character.ForceField:Destroy() end) end pcall(function() plr.Character.Torso.Anchored=false end) pcall(function() CSB:FireClient('Blind',false,nil) end) end)
 		end
 		pcall(function() local l = Instance.new('PointLight',plr.Character) l.Enabled=true l.Color=Color3.new(1,1,0) end)
-		
+
 		if round.mode=='Juggernaut' and plr~=round.killer then
 			pcall(function() game:service'ServerStorage'.PlayerSword:clone().Parent = plr.Backpack end)
 		end
@@ -895,7 +907,12 @@ local function NewRound()
 			end
 		end
 		if not checkTable(round.survivors,round.killer) then break end
-		Hint('Game in progress ('..i..')')
+		local addOn = ""
+		if round.mode=='Juggernaut' then
+			pcall(function() addOn = (" | Killer's health: " .. tostring(round.killer.Character.Humanoid.Health) .. "/600") end)
+		end
+		addOn = addOn or ""
+		Hint('Game in progress ('..i..')' .. addOn)
 		wait(1)
 	end
 	
