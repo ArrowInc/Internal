@@ -262,7 +262,7 @@ local function isAdmin(plr)
 	end
 end
 
-
+--
 
 local function Hint ( tx , plr )
 	tx=tostring(tx):upper()
