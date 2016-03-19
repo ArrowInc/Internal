@@ -770,7 +770,7 @@ local function NewRound()
 		repeat round.killer=round.survivors[math.random(1,#round.survivors)] until (round.killer)and(round.killer~=lastRound.killer)
 	end
 	
-	if round.mode~='Inside Job'
+	if round.mode~='Inside Job' then
 		Hint('This round\'s Killer will be '..tostring(round.killer)..'!')
 		wait(3)
 	end
