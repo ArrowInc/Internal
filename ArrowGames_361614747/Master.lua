@@ -310,6 +310,9 @@ function CoinsODSMeta.__index:UpdateAsync(key,func)
 		return pcall(function() self:SetAsync(key,nData) end)
 	end
 end
+function CoinsODSMeta.__index:GetSortedAsync(...)
+	return ACTUAL_CoinsODS:GetSortedAsync(...)
+end
 function CoinsODSMeta.__index:UploadData(key)
 	local pData = self:GetAsync(key)
 	return pcall(function() ACTUAL_CoinsODS:SetAsync(pData) end)
@@ -337,6 +340,9 @@ function LevelsODSMeta.__index:UpdateAsync(key,func)
 	if suc then
 		return pcall(function() self:SetAsync(key,nData) end)
 	end
+end
+function LevelsODSMeta.__index:GetSortedAsync(...)
+	return ACTUAL_LevelsODS:GetSortedAsync(...)
 end
 function LevelsODSMeta.__index:UploadData(key)
 	local pData = self:GetAsync(key)
