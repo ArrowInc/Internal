@@ -545,8 +545,8 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 				if not plr then return end
 				wait()
 				Notification(plr,'You were killed by '..tostring(client).. '!',Color3.new(1,1,1),4)
-				pcall(function() GiveXP(client,10) end)
-				pcall(function() ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name)..' was killed by the Killer!',Color3.new(1,0,0)) end)
+				pcall(function() GiveXP(client,(plr==round.killer and 50 or 10)) end)
+				pcall(function() ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name)..' was killed!',Color3.new(1,0,0)) end)
 			end)()
 		end)
 	elseif mode == 'TakeDamage' then
@@ -911,7 +911,7 @@ local function NewRound()
 		if not checkTable(round.survivors,round.killer) then break end
 		local addOn = ""
 		if round.mode=='Juggernaut' then
-			pcall(function() addOn = (" | Killer's health: " .. tostring(round.killer.Character.Humanoid.Health) .. "/600") end)
+			pcall(function() addOn = (" | Killer's health: " .. tostring(math.floor(round.killer.Character.Humanoid.Health)) .. "/600") end)
 		end
 		addOn = addOn or ""
 		Hint('Game in progress ('..i..')' .. addOn)
