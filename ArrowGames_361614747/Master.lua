@@ -91,8 +91,8 @@ local MessageBlacklist = {
 }
 local Modes = {
 	'Normal',
-	'Normal',
-	'Normal', -- 3x more chances of it being normal
+	--'Normal',
+	--'Normal', -- 3x more chances of it being normal
 	
 	'Juggernaut',
 	'Inside Job',
@@ -665,7 +665,7 @@ local function NewRound()
 	
 	lastRound = copyTable(round)
 	round.running=true
-	round.mode = manuallySelectedMode or Modes[math.random(1,#Modes)]
+	round.mode = manuallySelectedMode or Modes[math.random(2,#Modes)]
 	round.winners = {}
 	round.survivors = game:GetService('Players'):GetPlayers()
 	round.killer=nil
