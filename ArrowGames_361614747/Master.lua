@@ -801,7 +801,7 @@ local function NewRound()
 			pcall(function() local fl=game:GetService('ServerStorage').Flashlight:clone() fl.Parent=plr.Backpack fl.CanBeDropped=false end)
 		end
 		
-		if plr==round.killer and round.Mode~='Inside Job' then
+		if plr==round.killer and round.mode~='Inside Job' then
 			pcall(function()
 				repeat wait() until (not plr) or (not plr.Character) or plr.Character:FindFirstChild('Body Colors')
 				for i,v in pairs(plr.Character:children()) do
@@ -846,7 +846,7 @@ local function NewRound()
 				
 				pcall(function() local l = Instance.new('PointLight',plr.Character.Torso) l.Color=Color3.new(1,0,0) l.Range=10 l.Enabled=true l.Name='KillerLight' end)
 				
-				pcall(function() plr.Character.Humanoid.MaxHealth = 600 plr.Character.Humanid.Health = 600 end)
+				pcall(function() plr.Character.Humanoid.MaxHealth = 600 plr.Character.Humanoid.Health = 600 end)
 			end)
 			pcall(function() Instance.new('BoolValue',plr.Character).Name = "KillerID" end)
 			pcall(function() plr.Character.Humanoid.WalkSpeed = plr.Character.Humanoid.WalkSpeed+5 end)
