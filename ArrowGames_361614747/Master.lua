@@ -661,7 +661,7 @@ local function NewRound()
 	if round.running then return false end
 	
 	
-	math.randomseed(os.time())
+	math.randomseed(os.time()*math.random())
 	
 	lastRound = copyTable(round)
 	round.running=true
@@ -770,8 +770,10 @@ local function NewRound()
 		repeat round.killer=round.survivors[math.random(1,#round.survivors)] until (round.killer)and(round.killer~=lastRound.killer)
 	end
 	
-	Hint('This round\'s Killer will be '..tostring(round.killer)..'!')
-	wait(3)
+	if round.mode~='Inside Job'
+		Hint('This round\'s Killer will be '..tostring(round.killer)..'!')
+		wait(3)
+	end
 	Hint('Teleporting Players...')
 	
 	round.survivors = game:GetService('Players'):GetPlayers()
@@ -1122,6 +1124,7 @@ local function onChat(plr,msg)
 		elseif msg:lower():sub(1,6)=='/mode ' then
 			log()
 			pcall(function()
+				echo(msg:sub(7))
 				if checkTable(Modes,msg:sub(7)) then
 					manuallySelectedMode = msg:sub(7)
 					CSB:FireClient(plr,'Manually selected mode "' .. tostring(manuallySelectedMode) .. '"')
