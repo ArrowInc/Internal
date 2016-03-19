@@ -154,6 +154,8 @@ local RecentChatLog = {}
 
 local PlayerData = {}
 
+local RoundsToSpecialRound = 3
+
 local function GenStr(len)
 		len = len or 10
 		local s = ''
@@ -665,7 +667,17 @@ local function NewRound()
 	
 	lastRound = copyTable(round)
 	round.running=true
-	round.mode = manuallySelectedMode or Modes[math.random(2,#Modes)]
+	round.mode = manuallySelectedMode or "AUTO_SELECTED"
+	if round.mode=="AUTO_SELECTED" then
+		if RoundsToSpecialRound<=0 then
+			RoundsToSpecialRound = 3
+			round.mode = Modes[math.random(2,#Modes)]
+		else
+			RoundsToSpecialRound = RoundsToSpecialRound-1
+			round.mode="Normal"
+		end
+			
+	end
 	round.winners = {}
 	round.survivors = game:GetService('Players'):GetPlayers()
 	round.killer=nil
