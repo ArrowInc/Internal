@@ -1211,6 +1211,11 @@ local function DisconnectPlayer(plr)
 			--[[round.survivors[i]=nil]]table.remove(round.survivors,i)
 		end
 	end
+	coroutine.wrap(function()
+		pcall(function() DataStore:UploadData('user_'..plr.userId) end)
+		pcall(function() CoinsODS:UploadData('user_'..plr.userId) end)
+		pcall(function() LevelsODS:UploadData('user_'..plr.userId) end)
+	end)()
 	ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name) .. ' has left the game!',Color3.new(0,0,0))
 	UpdateMostCoinsBoard()
 end
