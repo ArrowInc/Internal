@@ -1179,6 +1179,9 @@ local function ConnectPlayer(plr)
 	pcall(function() level.Value = pData["Level"] end)
 	
 	--CSB:FireClient(plr,'SetupLocalPart',game:GetService('Lighting'):FindFirstChild('LocalDoor'))
+	if not plr:IsInGroup(2757514) then
+		CSB:FireClient(plr,'SetupLocalTransparency',workspace.Lobby.SpecialPart,1)
+	end
 	
 	Hint(cHint,plr)
 	
