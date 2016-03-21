@@ -701,7 +701,7 @@ local function NewRound()
 			
 	end
 	round.winners = {}
-	round.survivors = copyTable(connectedPlayers)
+	round.survivors = copyTable(ConnectedPlayers)
 	round.killer=nil
 	
 	manuallySelectedMode = nil
@@ -713,7 +713,7 @@ local function NewRound()
 			Hint('Invite your friends to play! Not enough players')
 			repeat wait() until (game:GetService('Players').NumPlayers-#watchingVideoAd-#AFKers)>=2
 		end
-		round.survivors=copyTable(connectedPlayers)
+		round.survivors=copyTable(ConnectedPlayers)
 		for i,v in pairs(watchingVideoAd) do
 			for i2,v2 in pairs(round.survivors) do
 				if v==v2 then table.remove(round.survivors,i2) end
@@ -810,7 +810,7 @@ local function NewRound()
 	end
 	Hint('Teleporting Players...')
 	
-	round.survivors = copyTable(connectedPlayers)
+	round.survivors = copyTable(ConnectedPlayers)
 	
 	for i,plr in pairs(round.survivors) do
 		if plr then
@@ -968,7 +968,7 @@ local function NewRound()
 	if winnersstr=='' then winnersstr='(Nobody)' end
 	Hint('Game ended. Winners: '..winnersstr)
 	wait()
-	for i,plr in pairs(copyTable(connectedPlayers)) do
+	for i,plr in pairs(copyTable(ConnectedPlayers)) do
 		pcall(function()
 			plr.TeamColor = BrickColor.new('Fossil')
 			plr:LoadCharacter()
