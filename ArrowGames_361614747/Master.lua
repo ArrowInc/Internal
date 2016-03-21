@@ -801,7 +801,7 @@ local function NewRound()
 		round.killer=manuallySelectedKiller
 		manuallySelectedKiller=nil
 	else
-		repeat pcall(function() round.killer=round.survivors[math.random(1,#round.survivors)] end) until (round.killer)and(round.killer~=lastRound.killer)
+		repeat pcall(function() round.survivors = copyTable(ConnectedPlayers) round.killer=round.survivors[math.random(1,#round.survivors)] end) until (round.killer)and(round.killer~=lastRound.killer)
 	end
 	
 	if round.mode~='Inside Job' then
