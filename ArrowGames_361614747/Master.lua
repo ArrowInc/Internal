@@ -603,6 +603,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			end
 			
 			ConnectedPlayers[networkReplicator]=client
+			pcall(function() print('Connected player ' .. tostring(client.Name) .. ':' .. tostring(client.userId)) end)
 		end)
 	end
 end)
@@ -1271,6 +1272,7 @@ local function DisconnectPlayer(plr)
 			ConnectedPlayers[i] = nil
 		end
 	end
+	pcall(function() print('Disconnected player ' .. tostring(plr.Name) .. ':' .. tostring(plr.userId)) end)
 	for i,v in pairs(round.survivors) do
 		if v==plr then
 			--[[round.survivors[i]=nil]]table.remove(round.survivors,i)
