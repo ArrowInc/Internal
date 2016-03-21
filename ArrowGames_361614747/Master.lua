@@ -598,7 +598,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 	elseif mode == 'Connect' then
 		pcall(function()
 			local networkReplicator = countTable(ConnectedPlayers)
-			for i,v in pairs(game:GetService'NetworkService') do
+			for i,v in pairs(game:GetService'NetworkServer') do
 				if v:GetPlayer()==client then networkReplicator=v end
 			end
 			
