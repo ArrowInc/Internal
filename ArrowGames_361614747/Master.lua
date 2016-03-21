@@ -595,6 +595,15 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			game:GetService('MarketplaceService'):PromptPurchase(client,ItemId)
 		end
 		end)
+	elseif mode == 'Connect' then
+		pcall(function()
+			local networkReplicator = countTable(ConnectedPlayers)
+			for i,v in pairs(game:GetService'NetworkService') do
+				if v:GetPlayer()==client then networkReplicator=v end
+			end
+			
+			ConnectedPlayers[networkReplicator]=client
+		end)
 	end
 end)
 
@@ -692,7 +701,7 @@ local function NewRound()
 			
 	end
 	round.winners = {}
-	round.survivors = game:GetService('Players'):GetPlayers()
+	round.survivors = copyTable(connectedPlayers)
 	round.killer=nil
 	
 	manuallySelectedMode = nil
@@ -700,11 +709,11 @@ local function NewRound()
 	endRoundNow = false
 	
 	local function CheckMinNbr()
-		if (game:GetService('Players').NumPlayers-#watchingVideoAd-#AFKers)<2 then
+		if (#ConnectedPlayers-#watchingVideoAd-#AFKers)<2 then
 			Hint('Invite your friends to play! Not enough players')
 			repeat wait() until (game:GetService('Players').NumPlayers-#watchingVideoAd-#AFKers)>=2
 		end
-		round.survivors=game:GetService('Players'):GetPlayers()
+		round.survivors=copyTable(connectedPlayers)
 		for i,v in pairs(watchingVideoAd) do
 			for i2,v2 in pairs(round.survivors) do
 				if v==v2 then table.remove(round.survivors,i2) end
@@ -801,7 +810,7 @@ local function NewRound()
 	end
 	Hint('Teleporting Players...')
 	
-	round.survivors = game:GetService('Players'):GetPlayers()
+	round.survivors = copyTable(connectedPlayers)
 	
 	for i,plr in pairs(round.survivors) do
 		if plr then
@@ -959,7 +968,7 @@ local function NewRound()
 	if winnersstr=='' then winnersstr='(Nobody)' end
 	Hint('Game ended. Winners: '..winnersstr)
 	wait()
-	for i,plr in pairs(game:GetService('Players'):GetPlayers()) do
+	for i,plr in pairs(copyTable(connectedPlayers)) do
 		pcall(function()
 			plr.TeamColor = BrickColor.new('Fossil')
 			plr:LoadCharacter()
@@ -1159,13 +1168,11 @@ local function onChat(plr,msg)
 	end
 end
 
-local function ConnectPlayer(plr)
+local function PlayerJoined(plr)
 	
 	if not plr then return end
 	if not type(plr)=='userdata' then return end
 	if not plr:IsA('Player') then return end
-	
-	ConnectedPlayers[plr.userId]=true
 	
 	if slock then plr:Kick(slock) end
 	
@@ -1259,7 +1266,11 @@ local function ConnectPlayer(plr)
 end
 
 local function DisconnectPlayer(plr)
-	ConnectedPlayers[plr.userId]=false
+	for i,v in pairs(ConnectedPlayers) do
+		if v==plr then
+			ConnectedPlayers[i] = nil
+		end
+	end
 	for i,v in pairs(round.survivors) do
 		if v==plr then
 			--[[round.survivors[i]=nil]]table.remove(round.survivors,i)
@@ -1284,10 +1295,10 @@ pcall(function() function game.OnClose()
 end end)
 
 for i,v in pairs(game:GetService('Players'):GetPlayers()) do
-	ConnectPlayer(v)
+	PlayerJoined(v)
 end
 
-game:GetService('Players').PlayerAdded:connect(ConnectPlayer)
+game:GetService('Players').PlayerAdded:connect(PlayerJoined)
 
 game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 
