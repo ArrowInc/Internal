@@ -586,10 +586,11 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		pcall(function() GiveXP(client,0) end)
 	elseif mode == 'HandleVIPObbyButton' then
 		pcall(function()
+		local SpawnL = workspace.Lobby.VIPObby.Spawn
 		local ItemId = 385723928
 		local PlayerHasPass = game:GetService('BadgeService'):UserHasBadge(client.userId,ItemId) or InGamePurchases["User:"..tostring(client.userId).."_Asset:"..tostring(ItemId)]
 		if PlayerHasPass then
-			client.Character.Torso.CFrame = CFrame.new(Spawn.Position)
+			client.Character.Torso.CFrame = CFrame.new(SpawnL.Position)
 		else
 			game:GetService('MarketplaceService'):PromptPurchase(client,ItemId)
 		end
