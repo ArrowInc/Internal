@@ -787,7 +787,7 @@ local function NewRound()
 		end
 	end
 	
-	local pickKillertbl = copyTable(round.survivors or {})
+	--[[local pickKillertbl = copyTable(round.survivors or {})
 	for i,v in pairs(round.survivors) do
 		pcall(function()
 		if ((function() return DataStore:GetAsync('user_'..v.userId)or{}end)()["Purchased"] or {})["2x Killer Chance"] then
@@ -795,13 +795,13 @@ local function NewRound()
 			print(v.Name,'has the 2x Killer Chance pass!')
 		end
 		end)
-	end
+	end]]
 	
 	if manuallySelectedKiller then
 		round.killer=manuallySelectedKiller
 		manuallySelectedKiller=nil
 	else
-		repeat round.killer=round.survivors[math.random(1,#round.survivors)] until (round.killer)and(round.killer~=lastRound.killer)
+		repeat pcall(function() round.killer=round.survivors[math.random(1,#round.survivors)] end) until (round.killer)and(round.killer~=lastRound.killer)
 	end
 	
 	if round.mode~='Inside Job' then
