@@ -711,7 +711,7 @@ local function NewRound()
 	local function CheckMinNbr()
 		if (#ConnectedPlayers-#watchingVideoAd-#AFKers)<2 then
 			Hint('Invite your friends to play! Not enough players')
-			repeat wait() until (game:GetService('Players').NumPlayers-#watchingVideoAd-#AFKers)>=2
+			repeat wait() until (#ConnectedPlayers-#watchingVideoAd-#AFKers)>=2
 		end
 		round.survivors=copyTable(ConnectedPlayers)
 		for i,v in pairs(watchingVideoAd) do
