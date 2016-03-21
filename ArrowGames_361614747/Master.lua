@@ -1192,9 +1192,9 @@ local function ConnectPlayer(plr)
 	pcall(function() level.Value = pData["Level"] end)
 	
 	--CSB:FireClient(plr,'SetupLocalPart',game:GetService('Lighting'):FindFirstChild('LocalDoor'))
-	--[[if plr:IsInGroup(2757514) then
+	if plr:IsInGroup(2757514) then
 		CSB:FireClient(plr,'SetupLocalTransparency',workspace.Lobby.SpecialPart,1)
-	end]]
+	end
 	
 	local LastDailyBonus = pData["LastDailyBonus"] or 0
 	if os.time()>LastDailyBonus+(60*60*24) then
