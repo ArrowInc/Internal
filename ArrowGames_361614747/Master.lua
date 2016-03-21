@@ -156,6 +156,8 @@ local PlayerData = {}
 
 local RoundsToSpecialRound = 3
 
+local InGamePurchases = {}
+
 local function GenStr(len)
 		len = len or 10
 		local s = ''
@@ -582,6 +584,16 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		pcall(function() game:GetService('MarketplaceService'):PromptPurchase(client,args[1]) end)
 	elseif mode == 'UpdateXP' then
 		pcall(function() GiveXP(client,0) end)
+	elseif mode == 'HandleVIPObbyButton' then
+		pcall(function()
+		local ItemId = 385723928
+		local PlayerHasPass = game:GetService('BadgeService'):UserHasBadge(client.userId,ItemId) or InGamePurchases["User:"..tostring(client.userId).."_Asset:"..tostring(ItemId)]
+		if PlayerHasPass then
+			client.Character.Torso.CFrame = CFrame.new(Spawn.Position)
+		else
+			game:GetService('MarketplaceService'):PromptPurchase(client,ItemId)
+		end
+		end)
 	end
 end)
 
