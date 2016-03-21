@@ -597,7 +597,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		end)
 	elseif mode == 'Connect' then
 		pcall(function()
-			local networkReplicator = countTable(ConnectedPlayers)
+			local networkReplicator = countTable(ConnectedPlayers)+1
 			for i,v in pairs(game:GetService'NetworkServer':children()) do
 				if v:GetPlayer()==client then networkReplicator=v end
 			end
@@ -709,9 +709,9 @@ local function NewRound()
 	endRoundNow = false
 	
 	local function CheckMinNbr()
-		if (#ConnectedPlayers-#watchingVideoAd-#AFKers)<2 then
+		if (countTable(ConnectedPlayers)-#watchingVideoAd-#AFKers)<2 then
 			Hint('Invite your friends to play! Not enough players')
-			repeat wait() until (#ConnectedPlayers-#watchingVideoAd-#AFKers)>=2
+			repeat wait() until (countTable(ConnectedPlayers)-#watchingVideoAd-#AFKers)>=2
 		end
 		round.survivors=copyTable(ConnectedPlayers)
 		for i,v in pairs(watchingVideoAd) do
