@@ -1183,8 +1183,6 @@ local function ConnectPlayer(plr)
 		CSB:FireClient(plr,'SetupLocalTransparency',workspace.Lobby.SpecialPart,1)
 	end]]
 	
-	Hint(cHint,plr)
-	
 	local LastDailyBonus = pData["LastDailyBonus"] or 0
 	if os.time()>LastDailyBonus+(60*60*24) then
 		local cNum = 20
@@ -1224,6 +1222,7 @@ local function ConnectPlayer(plr)
 		delay(5,function() pcall(function() GiveXP(plr,0) end) end)
 		plr:WaitForChild('PlayerGui')
 		pcall(function() GiveXP(plr,0) end)
+		Hint(cHint,plr)
 		end)()
 	end)
 
