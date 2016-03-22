@@ -1227,6 +1227,8 @@ local function PlayerJoined(plr)
 		CSB:FireClient(plr,'SetupLocalTransparency',workspace.Lobby.SpecialPart,1)
 	end
 	
+	repeat for i,v in pairs(ConnectedPlayers) do if v==plr then break end end wait() until false
+	
 	local LastDailyBonus = pData["LastDailyBonus"] or 0
 	if os.time()>LastDailyBonus+(60*60*24) then
 		local cNum = 20
