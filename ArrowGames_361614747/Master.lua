@@ -668,10 +668,6 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		end
 	end
 	
-	plr.Chatted:connect(function(msg)
-		pcall(onChat,false,plr,msg)
-	end)
-	
 	plr.CharacterAdded:connect(function(c)
 		coroutine.wrap(function()
 		pcall(function() GiveXP(plr,0) end)
@@ -681,6 +677,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		Hint(cHint,plr)
 		end)()
 	end)
+	plr:LoadCharacter()
 
 	pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end)
 	
@@ -1301,6 +1298,11 @@ local function PlayerJoined(plr)
 	end
 	
 	--repeat wait() until (function() for i,v in pairs(ConnectedPlayers) do if v==plr then return true end end return false end)()
+	
+	
+	plr.Chatted:connect(function(msg)
+		pcall(onChat,false,plr,msg)
+	end)
 	
 	NewRound()
 end
