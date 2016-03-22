@@ -49,6 +49,13 @@ end
 --- C O N S T A N T S ---
 -------------------------
 
+local MasterPlaceVersionNumber = 0
+-- 0 - Alpha/Beta
+-- 1 - First release
+-- 2 - Second release
+-- 3 - Third release
+-- X - Xth release
+
 local Codes = {
 	{
 		Code = 'Beta',
@@ -264,7 +271,7 @@ end
 
 local function GetPlaceVersionString(PV)
 	local PV = PV or game.PlaceVersion
-	FS = "0"
+	FS = tostring(MasterPlaceVersionNumber)
 	pcall(function()
 	PV = tostring(PV)
 	for i=1,#PV do
