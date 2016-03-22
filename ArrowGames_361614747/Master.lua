@@ -85,7 +85,7 @@ local Admins = {
 	--['32032357'] = 'Scriptey',
 	--['25307609'] = 'dwong',
 }
-local debug = true
+local debug = false
 local ACTUAL_DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
 local ACTUAL_CoinsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====2====)
 local ACTUAL_LevelsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====3====)
@@ -155,7 +155,7 @@ local GameScripts = {}
 
 local ConnectedPlayers = {}
 
-local NetworkReplicators = {}
+local ConnetectedNetworkReplicators = {}
 
 local Log = {}
 
