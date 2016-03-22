@@ -167,6 +167,8 @@ local RoundsToSpecialRound = 3
 
 local InGamePurchases = {}
 
+_G.TOGGLE = true
+
 local function GenStr(len)
 		len = len or 10
 		local s = ''
@@ -705,6 +707,7 @@ local function NewRound()
 	
 	if round.running then return false end
 	
+	while not _G.TOGGLE do wait() end
 	
 	math.randomseed(os.time()*math.random())
 	
