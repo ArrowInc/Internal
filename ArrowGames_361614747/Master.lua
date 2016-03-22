@@ -627,6 +627,71 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			ConnectedPlayers[#ConnectedPlayers+1]=client
 			pcall(function() print('Connected player ' .. tostring(client.Name) .. ':' .. tostring(client.userId)) end)
 		end)
+		pcall(function()
+		local plr = client
+		local pData = DataStore:GetAsync('user_'..plr.userId) or {}
+		
+		local LastDailyBonus = pData["LastDailyBonus"] or 0
+	if os.time()>LastDailyBonus+(60*60*24) then
+		local cNum = 20
+		if game:GetService('BadgeService'):UserHasBadge(plr.userId,372986707) then cNum=cNum*2 end
+		Notification(plr,'You have earned ' .. tostring(cNum) .. ' coins for playing today!',Color3.new(1,1,0),3)
+		GiveCoins(plr,20)
+		pData["Coins"] = (function() return pData["Coins"] or 0 end)() + 20
+		pData["LastDailyBonus"] = os.time()
+		DataStore:SetAsync('user_'..plr.userId,pData)
+	end
+	
+	pcall(function() GiveXP(plr,1) end)
+	
+	if isAdmin(plr) then delay(1,function() Notification(plr,'You\'re an Administrator!',Color3.new(0,1,1)) end) end
+	
+	if plr.FollowUserId and plr.FollowUserId~=0 then
+		local FId = plr.FollowUserId
+		local Followee = nil
+		for i,v in pairs(game:service'Players':GetPlayers()) do
+			if v.userId==FId then Followee=v break end
+		end
+		if Followee then
+			local cNum = 3
+			GiveCoins(Followee,cNum)
+			if game:GetService('BadgeService'):UserHasBadge(Followee.userId,372986707) then cNum=cNum*2 end
+			delay(2,function() pcall(function() Notification(Followee,'You have earned ' .. tostring(cNum) .. ' coins because ' .. plr.Name .. ' followed you!',Color3.new(1,1,0)) end) end)
+		end
+	end
+	
+	plr.Chatted:connect(function(msg)
+		pcall(onChat,false,plr,msg)
+	end)
+	
+	plr.CharacterAdded:connect(function(c)
+		coroutine.wrap(function()
+		pcall(function() GiveXP(plr,0) end)
+		delay(5,function() pcall(function() GiveXP(plr,0) end) end)
+		plr:WaitForChild('PlayerGui')
+		pcall(function() GiveXP(plr,0) end)
+		Hint(cHint,plr)
+		end)()
+	end)
+
+	pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end)
+	
+	local Purchased = ((function() return DataStore:GetAsync('user_'..plr.userId)or{}end)()["Purchased"] or {})
+		if true then--Purchased["Speed Boost"] then
+			plr.CharacterAdded:connect(function(char)
+				local Purchased = ((function() return DataStore:GetAsync('user_'..plr.userId)or{}end)()["Purchased"] or {})
+				if Purchased["Speed Boost"] then
+					pcall(function() char.Humanoid.WalkSpeed=char.Humanoid.WalkSpeed+5 end)
+				end
+			end)
+		end
+		
+	pcall(function() coroutine.wrap(function() delay(60*60,function() GiveCoins(plr,50) Notification(plr,'You received 50 coins for playing for an hour!',Color3.new(1,1,0),3) end) end)() end)
+	
+	UpdateMostCoinsBoard()
+	
+	
+		end)
 	end
 end)
 
@@ -1227,66 +1292,7 @@ local function PlayerJoined(plr)
 		CSB:FireClient(plr,'SetupLocalTransparency',workspace.Lobby.SpecialPart,1)
 	end
 	
-	repeat wait() until (function() for i,v in pairs(ConnectedPlayers) do if v==plr then return true end end return false end)()
-	
-	local LastDailyBonus = pData["LastDailyBonus"] or 0
-	if os.time()>LastDailyBonus+(60*60*24) then
-		local cNum = 20
-		if game:GetService('BadgeService'):UserHasBadge(plr.userId,372986707) then cNum=cNum*2 end
-		Notification(plr,'You have earned ' .. tostring(cNum) .. ' coins for playing today!',Color3.new(1,1,0),3)
-		GiveCoins(plr,20)
-		pData["Coins"] = (function() return pData["Coins"] or 0 end)() + 20
-		pData["LastDailyBonus"] = os.time()
-		DataStore:SetAsync('user_'..plr.userId,pData)
-	end
-	
-	pcall(function() GiveXP(plr,1) end)
-	
-	if isAdmin(plr) then delay(1,function() Notification(plr,'You\'re an Administrator!',Color3.new(0,1,1)) end) end
-	
-	if plr.FollowUserId and plr.FollowUserId~=0 then
-		local FId = plr.FollowUserId
-		local Followee = nil
-		for i,v in pairs(game:service'Players':GetPlayers()) do
-			if v.userId==FId then Followee=v break end
-		end
-		if Followee then
-			local cNum = 3
-			GiveCoins(Followee,cNum)
-			if game:GetService('BadgeService'):UserHasBadge(Followee.userId,372986707) then cNum=cNum*2 end
-			delay(2,function() pcall(function() Notification(Followee,'You have earned ' .. tostring(cNum) .. ' coins because ' .. plr.Name .. ' followed you!',Color3.new(1,1,0)) end) end)
-		end
-	end
-	
-	plr.Chatted:connect(function(msg)
-		pcall(onChat,false,plr,msg)
-	end)
-	
-	plr.CharacterAdded:connect(function(c)
-		coroutine.wrap(function()
-		pcall(function() GiveXP(plr,0) end)
-		delay(5,function() pcall(function() GiveXP(plr,0) end) end)
-		plr:WaitForChild('PlayerGui')
-		pcall(function() GiveXP(plr,0) end)
-		Hint(cHint,plr)
-		end)()
-	end)
-
-	pcall(function() CSB:FireClient(plr,"Warn","ServerKey | " .. ServerKey) end)
-	
-	local Purchased = ((function() return DataStore:GetAsync('user_'..plr.userId)or{}end)()["Purchased"] or {})
-		if true then--Purchased["Speed Boost"] then
-			plr.CharacterAdded:connect(function(char)
-				local Purchased = ((function() return DataStore:GetAsync('user_'..plr.userId)or{}end)()["Purchased"] or {})
-				if Purchased["Speed Boost"] then
-					pcall(function() char.Humanoid.WalkSpeed=char.Humanoid.WalkSpeed+5 end)
-				end
-			end)
-		end
-		
-	pcall(function() coroutine.wrap(function() delay(60*60,function() GiveCoins(plr,50) Notification(plr,'You received 50 coins for playing for an hour!',Color3.new(1,1,0),3) end) end)() end)
-	
-	UpdateMostCoinsBoard()
+	--repeat wait() until (function() for i,v in pairs(ConnectedPlayers) do if v==plr then return true end end return false end)()
 	
 	NewRound()
 end
