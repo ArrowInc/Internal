@@ -148,6 +148,8 @@ local GameScripts = {}
 
 local ConnectedPlayers = {}
 
+local NetworkReplicators = {}
+
 local Log = {}
 
 local RecentChatLog = {}
@@ -598,12 +600,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 		end)
 	elseif mode == 'Connect' then
 		pcall(function()
-			local networkReplicator = countTable(ConnectedPlayers)+1
-			for i,v in pairs(game:GetService'NetworkServer':children()) do
-				if v:GetPlayer()==client then networkReplicator=v end
-			end
-			
-			ConnectedPlayers[networkReplicator]=client
+			ConnectedPlayers[#ConnectedPlayers+1]=client
 			pcall(function() print('Connected player ' .. tostring(client.Name) .. ':' .. tostring(client.userId)) end)
 		end)
 	end
@@ -803,7 +800,7 @@ local function NewRound()
 		round.killer=manuallySelectedKiller
 		manuallySelectedKiller=nil
 	else
-		repeat pcall(function() round.survivors = copyTable(ConnectedPlayers,true) error(#round.survivors) round.killer=round.survivors[math.random(1,#round.survivors)] end) until (round.killer)and(round.killer~=lastRound.killer)
+		repeat pcall(function() round.survivors = copyTable(ConnectedPlayers) round.killer=round.survivors[math.random(1,#round.survivors)] end) until (round.killer)and(round.killer~=lastRound.killer)
 	end
 	
 	if round.mode~='Inside Job' then
@@ -1287,6 +1284,26 @@ local function DisconnectPlayer(plr)
 	ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name) .. ' has left the game!',Color3.new(0,0,0))
 	UpdateMostCoinsBoard()
 end
+
+local function ConnectNetworkReplicator(nr)
+	pcall(function()
+	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') do
+		ConnectedNetworkReplicators[#ConnectedNetworkReplicators+1] = nr
+	end
+	end)
+end)
+
+local function DisconnectNetworkReplicator(nr)
+	pcall(function()
+	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') do
+		for i,v in pairs(ConnectedNetworkReplicators) do
+			if v==nr then
+				ConnectedNetworkReplicators[i]=nil
+			end
+		end
+	end
+	end)
+end)
 
 pcall(function() function game.OnClose()
 	--print'Closing'
