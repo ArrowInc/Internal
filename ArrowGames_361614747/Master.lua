@@ -1287,7 +1287,7 @@ end
 
 local function ConnectNetworkReplicator(nr)
 	pcall(function()
-	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') do
+	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') then
 		ConnectedNetworkReplicators[#ConnectedNetworkReplicators+1] = nr
 	end
 	end)
@@ -1295,7 +1295,7 @@ end
 
 local function DisconnectNetworkReplicator(nr)
 	pcall(function()
-	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') do
+	if nr and type(nr)=='userdata' and nr:IsA('NetworkReplicator') then
 		for i,v in pairs(ConnectedNetworkReplicators) do
 			if v==nr then
 				ConnectedNetworkReplicators[i]=nil
