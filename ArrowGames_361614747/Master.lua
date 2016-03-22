@@ -1291,7 +1291,7 @@ local function ConnectNetworkReplicator(nr)
 		ConnectedNetworkReplicators[#ConnectedNetworkReplicators+1] = nr
 	end
 	end)
-end)
+end
 
 local function DisconnectNetworkReplicator(nr)
 	pcall(function()
@@ -1299,11 +1299,12 @@ local function DisconnectNetworkReplicator(nr)
 		for i,v in pairs(ConnectedNetworkReplicators) do
 			if v==nr then
 				ConnectedNetworkReplicators[i]=nil
+				break
 			end
 		end
 	end
 	end)
-end)
+end
 
 pcall(function() function game.OnClose()
 	--print'Closing'
@@ -1321,6 +1322,10 @@ end
 game:GetService('Players').PlayerAdded:connect(PlayerJoined)
 
 game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
+
+game:GetService('NetworkServer').ChildAdded:connect(ConnectNetworkReplicator)
+
+game:GetService('NetworkServer').ChildRemoed:connect(DisconnectNetworkReplicator)
 
 _G.CheckForRemoteCommands = true
 
