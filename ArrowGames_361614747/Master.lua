@@ -234,11 +234,12 @@ local function ForceShutdown(r)
 	end
 end
 
-local function copyTable(t)
+local function copyTable(t,etc)
 	local nt = {}
 	for i,v in pairs(t) do
 		nt[i]=v
 	end
+	if etc then error(#t .. " => " .. #nt) end
 	return nt
 end
 
