@@ -262,6 +262,21 @@ local function checkTable(t,v)
 	return false
 end
 
+local function GetPlaceVersionString(PV)
+	local PV = PV or game.PlaceVersion
+	FS = "0"
+	pcall(function()
+	PV = tostring(PV)
+	for i=1,#PV do
+		if #FS~=0 then FS = FS .. "." end
+		FS = FS .. PV:sub(i,i)
+	end
+	end)
+	return FS
+end
+
+print('Place version: ' .. GetPlaceVersionString())
+
 local function isAdmin(plr)
 	if type(plr)=='number'then
 		if Admins[tostring(plr)] then return true end
