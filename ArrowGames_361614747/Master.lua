@@ -155,7 +155,7 @@ local GameScripts = {}
 
 local ConnectedPlayers = {}
 
-local ConnetectedNetworkReplicators = {}
+local ConnectedNetworkReplicators = {}
 
 local Log = {}
 
