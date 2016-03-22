@@ -566,6 +566,14 @@ game:GetService('ServerStorage'):WaitForChild('GiveCoins').Event:connect(functio
 	end
 end)
 
+game:GetService('ServerStorage'):WaitForChild('GiveCoins').Event:connect(function(src,token,...)
+	if token%2016==0 then
+		if src and src:IsA('Script') and (src:IsDescendantOf(workspace) or src:IsDescendantOf(game:GetService('ServerScriptService'))) then
+			return GiveXP(...)
+		end
+	end
+end)
+
 CSB.OnServerEvent:connect(function( client , mode , ... )
 	local args = {...}
 	if mode == 'Killed' then
