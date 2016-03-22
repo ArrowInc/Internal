@@ -1325,7 +1325,7 @@ game:GetService('Players').PlayerRemoving:connect(DisconnectPlayer)
 
 game:GetService('NetworkServer').ChildAdded:connect(ConnectNetworkReplicator)
 
-game:GetService('NetworkServer').ChildRemoed:connect(DisconnectNetworkReplicator)
+game:GetService('NetworkServer').ChildRemoved:connect(DisconnectNetworkReplicator)
 
 _G.CheckForRemoteCommands = true
 
