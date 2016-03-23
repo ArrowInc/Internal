@@ -81,7 +81,7 @@ local Admins = {
 	['10469346'] = 'chillybagpiper',
 	['55305559'] = 'Fireball1850',
 	['57264590'] = 'httpAbbey',
-	--['75750606'] = 'figuretjetsalt',
+	['75750606'] = 'figuretjetsalt', -- TRIAL (Start:3/23/16)
 	--['32032357'] = 'Scriptey',
 	--['25307609'] = 'dwong',
 }
