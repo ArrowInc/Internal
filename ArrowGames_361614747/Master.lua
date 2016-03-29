@@ -271,6 +271,15 @@ local function checkTable(t,v)
 	return false
 end
 
+local function Color3ToTable(col3)
+	if not col3 then return nil end
+	local tmp = {}
+	tmp[1] = col3.r
+	tmp[2] = col3.g
+	tmp[3] = col3.b
+	return tmp
+end
+
 local function GetPlaceVersionString(PV)
 	local PV = PV or game.PlaceVersion
 	FS = tostring(MasterPlaceVersionNumber)
@@ -414,7 +423,7 @@ local function ChatMakeSystemMessage ( plrs , tx , col , font , fontsize )
 				PlayerName = 'SERVER',
 				PlayerColor = {1,0,0},
 				Message = tx,
-				TextColor = col or {1,1,1},
+				TextColor = Color3ToTable(col) or {1,1,1},
 				PlayerTag = '',
 				ChatMode = 'Whisper',
 				WhisperTo = v.userId,
