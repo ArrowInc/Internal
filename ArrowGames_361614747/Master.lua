@@ -880,6 +880,18 @@ local function NewRound()
 			arrow.Anchored = false
 			arrow.Name = 'ARROW'
 			arrow.Parent = c
+			arrow.Touched:connect(function(hit)
+				if not arrow then return end
+				if not hit then return end
+				if not hit.Parent then return end
+				local p = game:service'Players':GetPlayerFromCharacter(hit.Parent)
+				if not p then return end
+				delay(.5,function() if not arrow then return end arrow:Destroy()
+					GiveXP(p,20)
+					Instance.new('ForceField',p.Character).Name = 'ArrowForceField'
+					delay(30,function() pcall(function() p.Character.ArrowForceField:Destroy() end) end)
+				end)
+			end)
 			part.Name = 'USED_FLOOR'
 			warn('ADDED ARROW #' .. tostring(i) .. ' @ ' .. tostring(arrow:GetFullName()))
 		end
@@ -1011,7 +1023,7 @@ local function NewRound()
 		plr.Character.Humanoid.Died:connect(function()
 			allowDisconnection=true
 			plr.TeamColor = BrickColor.new('Fossil')
-			plr:LoadCharacter()
+			--plr:LoadCharacter()
 			--[[round.survivors[i]=nil]]table.remove(round.survivors,i)
 			pcall(function() CSB:FireClient(plr,'MobileAdPlayer',true) end)
 			pcall(function() CSB:FireClient(plr,'AFKGui',true) end)
