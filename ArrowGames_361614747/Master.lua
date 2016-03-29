@@ -403,12 +403,23 @@ end
 local function ChatMakeSystemMessage ( plrs , tx , col , font , fontsize )
 	if type(plrs)~='table' then plrs={plrs} end
 	for i,v in pairs(plrs) do
-		CSB:FireClient(v,'ChatMakeSystemMessage',{
+		--[[CSB:FireClient(v,'ChatMakeSystemMessage',{
 			Text = tx,
 			Color = col,
 			Font = font,-- or Enum.Font.Legacy,
 			FontSize = fontsize,
-		})
+		})]]
+		pcall(function()
+			_G.Chat_NewMessage({
+				PlayerName = 'SERVER',
+				PlayerColor = {1,0,0},
+				Message = tx,
+				TextColor = col or {1,1,1},
+				PlayerTag = '',
+				ChatMode = 'Whisper',
+				WhisperId = v.userId,
+			})
+		end)
 	end
 end
 
