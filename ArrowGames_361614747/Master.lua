@@ -417,7 +417,7 @@ local function ChatMakeSystemMessage ( plrs , tx , col , font , fontsize )
 				TextColor = col or {1,1,1},
 				PlayerTag = '',
 				ChatMode = 'Whisper',
-				WhisperId = v.userId,
+				WhisperTo = v.userId,
 			})
 		end)
 	end
