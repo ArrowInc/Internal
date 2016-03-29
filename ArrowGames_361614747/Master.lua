@@ -875,9 +875,9 @@ local function NewRound()
 		pcall(function()
 		local part = c:FindFirstChild('FLOOR',true)
 		if part then
-			local arrow = Instance.new('Part',c)
-			arrow.BrickColor = BrickColor.new('Lime green')
+			local arrow = game:service'ServerStorage'.Arrow:clone()
 			arrow.Position = part.Position + Vector3.new(0,2,0)
+			arrow.Anchored = false
 			arrow.Name = 'ARROW'
 			part.Name = 'USED_FLOOR'
 			warn('ADDED ARROW #' .. tostring(i) .. ' @ ' .. tostring(arrow:GetFullName()))
