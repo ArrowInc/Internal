@@ -879,6 +879,7 @@ local function NewRound()
 			arrow.Position = part.Position + Vector3.new(0,2,0)
 			arrow.Anchored = false
 			arrow.Name = 'ARROW'
+			arrow.Parent = c
 			part.Name = 'USED_FLOOR'
 			warn('ADDED ARROW #' .. tostring(i) .. ' @ ' .. tostring(arrow:GetFullName()))
 		end
