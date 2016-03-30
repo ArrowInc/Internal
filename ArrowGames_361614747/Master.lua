@@ -527,6 +527,9 @@ local function GiveXP ( plrs , num , doNotDouble )
 		if newlvl then
 			pcall(function() v.leaderstats.Level.Value=newlvl end)
 		end
+		if newlvl==10 then
+			pcall(function() game:service'BadgeService':AwardBadge(v.userId,390885854) end)
+		end
 		pcall(function() CSB:FireClient(v,'UpdateLevelGui',newlvl,newvalue,(newlvl*100)) end)
 		--[[pcall(function()
 			if newvalue>(function() return (function() return DataStore:GetAsync('MOST_COINS') or {} end)()['Coins'] or 0 end)() then
@@ -1099,6 +1102,8 @@ local function NewRound()
 		for i,v in pairs(round.winners) do
 			if v==round.killer then
 				round.winners[i]=nil
+			else
+				pcall(function() game:service'BadgeService':AwardBadge(v.userId,390888283) end)
 			end
 		end
 	end
