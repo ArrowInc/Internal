@@ -1299,7 +1299,7 @@ local function onChat(plr,msg)
 		elseif msg:lower()=='/obby' then
 			log()
 			pcall(function()
-				local spwn = workspace:FindFirstChild('Obby'):FindFirstChild('Spawn')
+				local spwn = workspace:FindFirstChild('Lobby'):FindFirstChild('Obby'):FindFirstChild('Spawn')
 				pcall(function() plr.Character.Torso.CFrame = CFrame.new(spwn.Position) + Vector3.new(0,2,0) end)
 			end)
 		elseif msg:lower():sub(1,6)=='/mode ' then
@@ -1309,6 +1309,13 @@ local function onChat(plr,msg)
 				if checkTable(Modes,msg:sub(7)) then
 					manuallySelectedMode = msg:sub(7)
 					CSB:FireClient(plr,'Manually selected mode "' .. tostring(manuallySelectedMode) .. '"')
+				end
+			end)
+		elseif msg:lower()=='/awardbadge' then
+			log()
+			pcall(function()
+				for i,v in pairs(connectedPlayers) do
+					pcall(function() game:service'BadgeService':AwardBadge(v.userId,390887592) end)
 				end
 			end)
 		end
