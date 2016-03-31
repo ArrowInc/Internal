@@ -1181,12 +1181,13 @@ local function onChat(plr,msg)
 	for i,v in pairs(MessageBlacklist)do
 		if msg:match(v) and (not false--[[isAdmin(plr)]]) then
 			log('[EXPLOITING ATTEMPT DETECTED (#'..tostring(i)..')]: '..tostring(msg))
-			plr:Kick('Exploiting attempt detected!')
+			pcall(function() plr:Kick('Exploiting attempt detected!') end)
 			break
 		end
 	end
 	
 	if isAdmin(plr) then
+		if not plr then return end
 		if msg:sub(1,3)=='/e ' then msg=msg:sub(4) end
 		if msg:lower()=='/ff'then
 			log()
@@ -1314,7 +1315,7 @@ local function onChat(plr,msg)
 		elseif msg:lower()=='/awardbadge' then
 			log()
 			pcall(function()
-				for i,v in pairs(connectedPlayers) do
+				for i,v in pairs(ConnectedPlayers) do
 					pcall(function() game:service'BadgeService':AwardBadge(v.userId,390887592) end)
 				end
 			end)
@@ -1461,12 +1462,14 @@ coroutine.wrap(function()
 			
 			local remoteCommands
 			pcall(function() remoteCommands = game:GetService('HttpService'):GetAsync(====5====,true) end)
+			if remoteCommands~='null' then
 			pcall(function() remoteCommands = game:GetService('HttpService'):JSONDecode(remoteCommands) end)
 			pcall(function()
 				for i,v in pairs(remoteCommands or {}) do
 					coroutine.wrap(function() pcall(HandleRemoteCommand,false,v) end)()
 				end
 			end)
+			end
 		end
 	end)
 end)()
