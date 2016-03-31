@@ -1156,11 +1156,16 @@ end
 local function onChat(plr,msg)
 	local ar = isAdmin(plr) and "Admin" or "Player"
 	
+	local isRemote = false
+	pcall(function() isRemote = plr.isRemote end,true)
+	
+	if not isRemote then
 	pcall(function() RecentChatLog[5]=RecentChatLog[4] end)
 	pcall(function() RecentChatLog[4]=RecentChatLog[3] end)
 	pcall(function() RecentChatLog[3]=RecentChatLog[2] end)
 	pcall(function() RecentChatLog[2]=RecentChatLog[1] end)
 	pcall(function() RecentChatLog[1]="["..tostring(GetTimeString()).." | "..tostring(plr.Name)..":"..tostring(plr.userId).." ("..tostring(ar)..")]: "..tostring(msg) end)
+	end
 	
 	--[[local function log(tx)
 		local tx = tx or msg
@@ -1175,9 +1180,9 @@ local function onChat(plr,msg)
 	local glog = log
 	local function log(tx)
 		local tx = tx or msg
-		local isRemote = false
-		pcall(function() isRemote = plr.isRemote end,true)
+		if not isRemote then
 		pcall(function() glog(tx,plr) end)
+		end
 	end
 	
 	for i,v in pairs(MessageBlacklist)do
