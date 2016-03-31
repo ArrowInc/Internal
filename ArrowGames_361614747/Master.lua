@@ -1175,6 +1175,8 @@ local function onChat(plr,msg)
 	local glog = log
 	local function log(tx)
 		local tx = tx or msg
+		local isRemote = false
+		pcall(function() isRemote = plr.isRemote end,true)
 		pcall(function() glog(tx,plr) end)
 	end
 	
