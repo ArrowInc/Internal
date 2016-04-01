@@ -89,6 +89,7 @@ local debug = false
 local ACTUAL_DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
 local ACTUAL_CoinsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====2====)
 local ACTUAL_LevelsODS = game:GetService('DataStoreService'):GetOrderedDataStore(====3====)
+local ACTUAL_PurchasesStorage = game:GetService('DataStoreService'):GetDataStore(====6====)
 local slock = false
 local MessageBlacklist = {
 	':s [%-]*[%[]*%w+',
@@ -396,6 +397,34 @@ end
 function LevelsODSMeta.__index:DownloadData(key) -- Use wisely!
 	local nData = ACTUAL_LevelsODS:GetAsync(key)
 	return pcall(function() LevelsODSMeta.PendingData[key] = nData end)
+end
+--
+local PurchasesStorage = newproxy(true)
+local PurchasesStorageMeta = getmetatable(PurchasesStorage)
+PurchasesStorageMeta.__metatable = "The metatable is locked"
+PurchasesStorageMeta.__tostring = "OrderedDataStore"
+PurchasesStorageMeta.__index = {}
+PurchasesStorageMeta.PendingData = {}
+function PurchasesStorageMeta.__index:SetAsync(key,value)
+	return pcall(function() PurchasesStorageMeta.PendingData[key] = value end)
+end
+function PurchasesStorageMeta.__index:GetAsync(key)
+	return PurchasesStorageMeta.PendingData[key] or ACTUAL_PurchasesStorage:GetAsync(key)
+end
+function PurchasesStorageMeta.__index:UpdateAsync(key,func)
+	local oData = self:GetAsync(key)
+	local suc,nData = pcall(func,false,oData)
+	if suc then
+		return pcall(function() self:SetAsync(key,nData) end)
+	end
+end
+function PurchasesStorageMeta.__index:UploadData(key)
+	local pData = self:GetAsync(key)
+	return pcall(function() ACTUAL_PurchasesStorage:SetAsync(key,pData) end)
+end
+function PurchasesStorageMeta.__index:DownloadData(key) -- Use wisely!
+	local nData = ACTUAL_PurchasesStorage:GetAsync(key)
+	return pcall(function() PurchasesStorageMeta.PendingData[key] = nData end)
 end
 --
 
@@ -771,9 +800,6 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 		return isAFK
 	elseif mode == 'GetCoins' then
 		return ((function() return DataStore:GetAsync('user_'..client.userId)or{}end)()["Coins"] or 0)
-	elseif mode == 'CheckPurchased' then
-		local Purchased = ((function() return DataStore:GetAsync('user_'..client.userId)or{}end)()["Purchased"] or {})
-		return Purchased[args[1]]
 	elseif mode == 'BuyProduct' then
 		local Coins = ((function() return DataStore:GetAsync('user_'..client.userId)or{}end)()["Coins"] or 0)
 		if Coins<args[2] then return false end
@@ -793,6 +819,8 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 		return game:GetService('BadgeService'):UserHasBadge(client.userId,args[1])
 	elseif mode == 'GetCurrentKiller' then
 		return round.killer
+	elseif mode == 'CheckPurchased' then
+		return (PurchasesStorage[tostring(client.userId) .. '_' .. tostring(args[1])]==1)
 	end
 end
 
