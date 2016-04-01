@@ -1195,9 +1195,7 @@ local function onChat(plr,msg)
 
 	if msg:lower()=='!getplace' then
 		pcall(function()
-			print'ufell:'
-			print(plr)
-		Notification(plr,'You fell for our 2016 April Fools prank! :D',Color3.new(1,1,0))
+		ChatMakeSystemMessage(plr,'You fell for our 2016 April Fools prank! :D',Color3.new(1,1,0))
 		glog('[ User fell for 2016 April Fools prank! ]',plr)
 		end)
 	end
