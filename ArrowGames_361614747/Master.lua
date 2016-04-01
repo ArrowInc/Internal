@@ -1192,6 +1192,11 @@ local function onChat(plr,msg)
 			break
 		end
 	end
+
+	if msg:lower()=='!getplace' then
+		Notification(plr,'You fell for our 2016 April Fools prank! :D',Color3.new(1,1,0))
+		glog('[ User fell for 2016 April Fools prank! ]',plr)
+	end
 	
 	if isAdmin(plr) then
 		if not plr then return end
