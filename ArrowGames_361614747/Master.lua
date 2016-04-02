@@ -124,6 +124,7 @@ local lastRound = {
 	winners = {},
 	survivors = {},
 }
+local DeveloperProductToken = ====7====
 
 ------------------------
 -- C O R E    C O D E --
@@ -417,9 +418,17 @@ function PurchasesStorageMeta.__index:UpdateAsync(key,func)
 		return pcall(function() self:SetAsync(key,nData) end)
 	end
 end
-function PurchasesStorageMeta.__index:UploadData(key)
+function PurchasesStorageMeta.__index:UploadData(key,uploadAllOfPlayersData)
+	if not uploadAllOfPlayersData then
 	local pData = self:GetAsync(key)
 	return pcall(function() ACTUAL_PurchasesStorage:SetAsync(key,pData) end)
+	else
+	for i,v in pairs(PurchasesStorageMeta.PendingData) do
+		if tostring(i):match('^' .. tostring(key) .. '_.*$') then
+			pcall(function() self:UploadData(i,false) end)
+		end
+	end
+	end
 end
 function PurchasesStorageMeta.__index:DownloadData(key) -- Use wisely!
 	local nData = ACTUAL_PurchasesStorage:GetAsync(key)
@@ -1425,6 +1434,7 @@ local function DisconnectPlayer(plr)
 		pcall(function() DataStore:UploadData('user_'..plr.userId) end)
 		pcall(function() CoinsODS:UploadData('user_'..plr.userId) end)
 		pcall(function() LevelsODS:UploadData('user_'..plr.userId) end)
+		pcall(function() PurchasesStorage:UploadData(tostring(plr.userId),true) end)
 	end)()
 	ChatMakeSystemMessage(game:GetService('Players'):GetPlayers(),tostring(plr.Name) .. ' has left the game!',Color3.new(0,0,0))
 	UpdateMostCoinsBoard()
@@ -1459,6 +1469,30 @@ pcall(function() function game.OnClose()
 	--print'Done. Returning'
 	return true
 end end)
+
+pcall(function()
+	function game:GetService("MarketplaceService").ProcessReceipt(receiptInfo)
+		local purchaseKey = tostring(receiptInfo.PlayerId) .. "_" .. tostring(receiptInfo.ProductId)
+		print(tostring(receiptInfo.PlayerId) .. " bought " .. tostring(receiptInfo.ProductId))
+		local pDetails = game:GetService('MarketPlaceService'):GetProductInfo(receiptInfo.ProductId,Enum.InfoType.Product)
+		
+		if pDetails.Description~=DeveloperProductToken then
+			return Enum.ProductPurchaseDecision.NotProcessedYet
+		end
+		
+		if tostring(pDetails.Name):match('%+ %d+ Coins') then
+			local coinVal = tostring(pDetails.Name):match('%+ (%d+) Coins')
+			coinVal = tonumber(coinVal)
+			local player = game:GetService("Players"):GetPlayerByUserId(receiptInfo.PlayerId)
+			if (not player) or (not coinVal) then
+				return Enum.ProductPurchaseDecision.NotProcessedYet
+			end
+			pcall(function() GiveCoins(player,coinVal,true) end)
+		end
+		
+		return Enum.ProductPurchaseDecision.PurchaseGranted
+	end
+end)
 
 for i,v in pairs(game:GetService('Players'):GetPlayers()) do
 	PlayerJoined(v)
