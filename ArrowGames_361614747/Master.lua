@@ -124,7 +124,7 @@ local lastRound = {
 	winners = {},
 	survivors = {},
 }
-local DeveloperProductToken = ====7====
+--local DeveloperProductToken = ====7====
 
 ------------------------
 -- C O R E    C O D E --
