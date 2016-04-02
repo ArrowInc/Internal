@@ -124,7 +124,7 @@ local lastRound = {
 	winners = {},
 	survivors = {},
 }
---local DeveloperProductToken = ====7====
+local DeveloperProductToken = ====7====
 
 ------------------------
 -- C O R E    C O D E --
@@ -1471,10 +1471,10 @@ pcall(function() function game.OnClose()
 end end)
 
 pcall(function()
-	function game:GetService("MarketplaceService").ProcessReceipt(receiptInfo)
+	game:GetService("MarketplaceService").ProcessReceipt=function(receiptInfo)
 		local purchaseKey = tostring(receiptInfo.PlayerId) .. "_" .. tostring(receiptInfo.ProductId)
 		print(tostring(receiptInfo.PlayerId) .. " bought " .. tostring(receiptInfo.ProductId))
-		local pDetails = game:GetService('MarketPlaceService'):GetProductInfo(receiptInfo.ProductId,Enum.InfoType.Product)
+		local pDetails = game:GetService('MarketplaceService'):GetProductInfo(receiptInfo.ProductId,Enum.InfoType.Product)
 		
 		if pDetails.Description~=DeveloperProductToken then
 			return Enum.ProductPurchaseDecision.NotProcessedYet
