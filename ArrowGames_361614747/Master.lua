@@ -828,7 +828,8 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 	elseif mode == 'GetCurrentKiller' then
 		return round.killer
 	elseif mode == 'CheckPurchased' then
-		return (PurchasesStorage:GetAsync(tostring(client.userId) .. '_' .. tostring(args[1]))=1)
+		local purchased = PurchasesStorage:GetAsync(tostring(client.userId) .. '_' .. tostring(args[1]))
+		return (purchased==1)
 	end
 end
 
