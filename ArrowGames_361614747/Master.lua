@@ -690,6 +690,15 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			game:GetService('MarketplaceService'):PromptPurchase(client,ItemId)
 		end
 		end)
+	elseif mode == 'CheckPurchased' then
+		pcall(function()
+			local purchased = PurchasesStorage:GetAsync(tostring(client.userId) .. '_' .. tostring(args[1]))
+			local event = Instance.new('RemoteEvent',game:service'ReplicatedStorage')
+			event.Name = "Response_" .. tostring(args[2])
+			event:FireClient(client,purchased)
+			local con
+			con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
+		end)
 	elseif mode == 'Connect' then
 		pcall(function()
 			ConnectedPlayers[#ConnectedPlayers+1]=client
@@ -827,10 +836,6 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 		return game:GetService('BadgeService'):UserHasBadge(client.userId,args[1])
 	elseif mode == 'GetCurrentKiller' then
 		return round.killer
-	elseif mode == 'CheckPurchased' then
-		local purchased = PurchasesStorage:GetAsync(tostring(client.userId) .. '_' .. tostring(args[1]))
-		return (purchased==1)
-	end
 end
 
 local function NewRound()
