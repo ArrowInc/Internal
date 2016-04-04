@@ -698,7 +698,7 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			event.Name = "Response_" .. tostring(args[2])
 			event:FireClient(client,purchased)
 			local con
-			--con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
+			con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
 		end)
 	elseif mode == 'Connect' then
 		pcall(function()
@@ -837,6 +837,7 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 		return game:GetService('BadgeService'):UserHasBadge(client.userId,args[1])
 	elseif mode == 'GetCurrentKiller' then
 		return round.killer
+	end
 end
 
 local function NewRound()
