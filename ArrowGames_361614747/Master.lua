@@ -700,6 +700,16 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 			local con
 			con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
 		end)
+		
+	elseif mode == 'CheckOwnership' then
+		pcall(function()
+			local purchased = game:GetService('BadgeService'):UserHasBadge(client.userId,args[1])
+			local event = Instance.new('RemoteEvent',game:service'ReplicatedStorage')
+			event.Name = "Response_" .. tostring(args[2])
+			event:FireClient(client,purchased)
+			local con
+			con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
+		end)
 	elseif mode == 'Connect' then
 		pcall(function()
 			ConnectedPlayers[#ConnectedPlayers+1]=client
@@ -833,8 +843,6 @@ function MiddleMan.OnServerInvoke( client , mode , ...)
 			pcall(function() client.CharacterAdded:connect(function(c) pcall(function() c.Humanoid.WalkSpeed=c.Humanoid.WalkSpeed+5 end) end) end)
 		end
 		return true
-	elseif mode == 'CheckOwnership' then
-		return game:GetService('BadgeService'):UserHasBadge(client.userId,args[1])
 	elseif mode == 'GetCurrentKiller' then
 		return round.killer
 	end
