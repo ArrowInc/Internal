@@ -693,11 +693,12 @@ CSB.OnServerEvent:connect(function( client , mode , ... )
 	elseif mode == 'CheckPurchased' then
 		pcall(function()
 			local purchased = PurchasesStorage:GetAsync(tostring(client.userId) .. '_' .. tostring(args[1]))
+			purchased = (purchased==1)
 			local event = Instance.new('RemoteEvent',game:service'ReplicatedStorage')
 			event.Name = "Response_" .. tostring(args[2])
 			event:FireClient(client,purchased)
 			local con
-			con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
+			--con=event.OnServerEvent:connect(function() con:disconnect() event:Destroy() end)
 		end)
 	elseif mode == 'Connect' then
 		pcall(function()
