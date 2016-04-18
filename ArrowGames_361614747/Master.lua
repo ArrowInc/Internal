@@ -83,6 +83,7 @@ local Admins = {
 	['57264590'] = 'httpAbbey',
 	['32032357'] = 'Scriptey',
 	['25307609'] = 'dwong',
+	['34352565'] = 'TypicalModerator',
 }
 local debug = false
 local ACTUAL_DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
