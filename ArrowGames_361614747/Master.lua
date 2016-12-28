@@ -227,7 +227,7 @@ local function log(tx,plr)
 	ls=ls.."["..tostring(GetTimeString()).." | "..tostring(plr.Name)..":"..tostring(plr.userId).." ("..tostring(ar)..")]: "..tostring(tx)
 	table.insert(Log,ls)
 	coroutine.wrap(function()
-		pcall(function() warn(game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/log.php?placeId='..game.PlaceId..'&token=' .. ====4==== .. '&log='..ls,true)) end)	
+		--v2-- pcall(function() warn(game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/log.php?placeId='..game.PlaceId..'&token=' .. ====4==== .. '&log='..ls,true)) end)	
 	end)()
 end
 
@@ -1544,7 +1544,7 @@ function HandleRemoteCommand(cmd)
 	delay((cmd.Command:lower():match('^/shutdown .*$') or ((game:service'Players'.NumPlayers==1) and (cmd.Command:lower()=='/kick '..game:service'Players':children()[1].Name))) and 15 or .1,function() coroutine.wrap(function() pcall(onChat,false,fakePlr,cmd.Command) end)() end)
 	
 	delay((cmd.ServerKey and .1 or 10),function()
-		pcall(function() game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/handlecmd.php?action=clear&cmdId=' .. tostring(cmd.CmdId) .. '&token=' .. ====4====) end)
+		--v2-- pcall(function() game:GetService('HttpService'):GetAsync('http://www.rsoindustries.com/Arrow/ArrowRemote/handlecmd.php?action=clear&cmdId=' .. tostring(cmd.CmdId) .. '&token=' .. ====4====) end)
 	end)
 end
 
