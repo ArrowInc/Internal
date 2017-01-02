@@ -77,13 +77,7 @@ local Codes = {
 local Admins = {
 	['56254686'] = 'RafDev',
 	['25617131'] = 'MisterBid',
-	['1135681'] = 'SimplyPixel',
-	['10469346'] = 'chillybagpiper',
-	['55305559'] = 'Fireball1850',
-	['57264590'] = 'httpAbbey',
-	['32032357'] = 'Scriptey',
 	['25307609'] = 'dwong',
-	['34352565'] = 'TypicalModerator',
 }
 local debug = false
 local ACTUAL_DataStore = game:GetService('DataStoreService'):GetDataStore(====1====)
@@ -108,7 +102,7 @@ local Modes = {
 }
 local SpecialModeDescription = {
 	["Juggernaut"] = "All Players have swords. Kill the Killer to win!",
-	["Inside Job"] = "The Killer is hidden. Trust no one!",
+	["Inside Job"] = "The Killer's are hidden. Trust no one!",
 }
 local round = {
 	running=false,
@@ -243,7 +237,7 @@ local function ForceShutdown(r)
 	end
 	-- Crash?
 	while true do
-		Instance.new('Message',workspace).Text = 'SHUTTING DOWN: CRASHING SERVER'
+		Instance.new('Message',workspace).Text = 'Please rejoin: Game updated'
 	end
 end
 
@@ -1018,10 +1012,10 @@ local function NewRound()
 		if plr==round.killer and round.mode~='Inside Job' then
 		plr.TeamColor = BrickColor.new('Really red')
 		local cChar = plr.Character
-		delay(16,function() if plr.Character==cChar then Notification(plr,'You are the Killer. Kill all the Players with your sword!',Color3.new(1,0,0),4) end end)
+		delay(16,function() if plr.Character==cChar then Notification(plr,'You are the Killer. Kill all the Players to win!',Color3.new(1,0,0),4) end end)
 		else
 		plr.TeamColor = BrickColor.new('Electric blue')
-		Notification(plr,'You are a Player. Survive the longer you can!',Color3.new(9/255,137/255,207/255),4)
+		Notification(plr,'You are a Player. Survive as long as you can!',Color3.new(9/255,137/255,207/255),4)
 		end
 		plr:LoadCharacter()
 		wait()
@@ -1125,7 +1119,7 @@ local function NewRound()
 		end
 	end
 	
-	local sw = game:GetService('ServerStorage'):FindFirstChild('Sword')
+	local sw = game:GetService('ServerStorage'):FindFirstChild('M14')
 	pcall(function() sw=sw:clone() sw.Parent=round.killer.Backpack sw.CanBeDropped=false end)
 	
 	for i=180,0,-1 do
