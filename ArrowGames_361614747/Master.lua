@@ -1119,7 +1119,7 @@ local function NewRound()
 		end
 	end
 	
-	local sw = game:GetService('ServerStorage'):FindFirstChild('M14')
+	local sw = game:GetService('ServerStorage'):FindFirstChild('Sword')
 	pcall(function() sw=sw:clone() sw.Parent=round.killer.Backpack sw.CanBeDropped=false end)
 	
 	for i=180,0,-1 do
