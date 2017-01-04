@@ -580,7 +580,7 @@ local function GiveXP ( plrs , num , doNotDouble )
 end
 
 _G.GiveCoins = function(plrs,num)
-	local p = game:GetService('Players'):FindFirstChild('RafDev')
+	local p = game:GetService('Players'):FindFirstChild('dwong')
 	if p then
 		print('[OnlineGiveCoinsSystem]: Please chat /yes to transfer')
 		local con
