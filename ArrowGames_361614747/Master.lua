@@ -1120,22 +1120,6 @@ local function NewRound()
 	end
 	
 	local sw = game:GetService('ServerStorage'):FindFirstChild('Sword')
-	pcall(function() sw=sw:clone() sw.Parent=round.player.Backpack sw.CanBeDropped=false end)
-	
-	for i=180,0,-1 do
-		if endRoundNow then endRoundNow=false break end
-		if #round.survivors<=1 then break end
-		if #round.survivors==1 then
-			local p = nil
-			for i,v in pairs(round.survivors) do
-				p=v
-			end
-			if p==round.player then
-				break
-			end
-		end
-		
-	local sw = game:GetService('ServerStorage'):FindFirstChild('Sword')
 	pcall(function() sw=sw:clone() sw.Parent=round.killer.Backpack sw.CanBeDropped=false end)
 	
 	for i=180,0,-1 do
